@@ -25,7 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_title"
-        android:singleLine="false"
+        android:singleLine="true"
         android:hint="@string/hint_et_drop"
         android:padding="@dimen/et_dialog_padding"/>
 
@@ -33,9 +33,9 @@
         android:id="@+id/bpv_date"
         android:layout_below="@id/et_drop"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="300dp"/>
     <Button
-        android:id="@+id/btn_add_it"
+        android:id="@+id/btn_add"
         android:layout_below="@id/bpv_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
