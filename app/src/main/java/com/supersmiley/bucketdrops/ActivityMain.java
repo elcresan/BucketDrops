@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.supersmiley.bucketdrops.Adapters.AdapterDrops;
 
 public class ActivityMain extends AppCompatActivity{
 
@@ -36,7 +37,7 @@ public class ActivityMain extends AppCompatActivity{
         mBtnAdd = (Button) findViewById(R.id.btn_add);        
         mBtnAdd.setOnClickListener(mBtonAddListener);
         mRecycler = (RecyclerView) findViewById(R.id.rv_drops);
-
+        mRecycler.setAdapter(new AdapterDrops(this));
         setSupportActionBar(mToolbar);
         initBackgroundImage();
     }
