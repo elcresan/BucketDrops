@@ -14,7 +14,6 @@ import android.widget.ImageButton;
 import com.supersmiley.bucketdrops.beans.Drop;
 
 import io.realm.Realm;
-import io.realm.RealmConfiguration;
 
 public class DialogAdd extends DialogFragment {
     private ImageButton mBtnClose;
@@ -43,9 +42,6 @@ public class DialogAdd extends DialogFragment {
         // TODO: Get time from the date picker.
         long now = System.currentTimeMillis();
         String what = mInputWhat.getText().toString();
-
-        RealmConfiguration configuration = new RealmConfiguration.Builder(getActivity()).build();
-        Realm.setDefaultConfiguration(configuration);
 
         // Get realm and create the new object
         Realm realm = Realm.getDefaultInstance();

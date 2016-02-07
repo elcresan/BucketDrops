@@ -8,13 +8,23 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.supersmiley.bucketdrops.R;
+import com.supersmiley.bucketdrops.beans.Drop;
+
+import io.realm.RealmResults;
 
 public class AdapterDrops extends RecyclerView.Adapter<AdapterDrops.DropHolder> {
 
     private LayoutInflater mInflater;
+    private RealmResults<Drop> mResults;
 
-    public AdapterDrops(Context context){
+    public AdapterDrops(Context context, RealmResults<Drop> results){
         mInflater = LayoutInflater.from(context);
+        update(results);
+    }
+
+    public void update(RealmResults<Drop> results){
+        mResults = results;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -26,14 +36,15 @@ public class AdapterDrops extends RecyclerView.Adapter<AdapterDrops.DropHolder> 
 
     @Override
     public void onBindViewHolder(DropHolder holder, int position) {
-        holder.mTextWhat.setText("Item " + position);
+        Drop drop = mResults.get(position);
+
+        holder.mTextWhat.setText(drop.getWhat());
         holder.mTextWhen.setText("Today!");
     }
 
-
     @Override
     public int getItemCount() {
-        return 100;
+        return mResults.size();
     }
 
     public static class DropHolder extends RecyclerView.ViewHolder{
