@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.supersmiley.bucketdrops.R;
@@ -12,7 +13,9 @@ import com.supersmiley.bucketdrops.beans.Drop;
 
 import io.realm.RealmResults;
 
-public class AdapterDrops extends RecyclerView.Adapter<AdapterDrops.DropHolder> {
+public class AdapterDrops extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    public static final int ITEM = 0;
+    public static final int FOOTER = 1;
 
     private LayoutInflater mInflater;
     private RealmResults<Drop> mResults;
@@ -28,23 +31,40 @@ public class AdapterDrops extends RecyclerView.Adapter<AdapterDrops.DropHolder> 
     }
 
     @Override
-    public DropHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.row_drop, parent, false);
-        return new DropHolder(view);
+    public int getItemViewType(int position) {
+        // We return an item if results are null or if the position is withing the bounds of the results
+        if(mResults == null || position < mResults.size()){
+            return ITEM;
+        } else{
+                return FOOTER;
+        }
+    }
+
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if(viewType == FOOTER){
+            View view = mInflater.inflate(R.layout.footer, parent, false);
+            return new FooterHolder(view);
+        } else{
+            View view = mInflater.inflate(R.layout.row_drop, parent, false);
+           return new DropHolder(view);
+        }
     }
 
 
     @Override
-    public void onBindViewHolder(DropHolder holder, int position) {
-        Drop drop = mResults.get(position);
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
-        holder.mTextWhat.setText(drop.getWhat());
-        holder.mTextWhen.setText("Today!");
+        if(holder instanceof DropHolder){
+            Drop drop = mResults.get(position);
+            ((DropHolder)holder).mTextWhat.setText(drop.getWhat());
+            ((DropHolder)holder).mTextWhen.setText("Today!");
+        }
     }
 
     @Override
     public int getItemCount() {
-        return mResults.size();
+        return mResults.size() + 1;
     }
 
     public static class DropHolder extends RecyclerView.ViewHolder{
@@ -56,6 +76,16 @@ public class AdapterDrops extends RecyclerView.Adapter<AdapterDrops.DropHolder> 
 
             mTextWhat = (TextView) itemView.findViewById(R.id.tv_what);
             mTextWhen = (TextView) itemView.findViewById(R.id.tv_when);
+        }
+    }
+
+    public static class FooterHolder extends RecyclerView.ViewHolder{
+        Button mBtnAdd;
+
+        public FooterHolder(View itemView) {
+            super(itemView);
+
+            mBtnAdd = (Button) itemView.findViewById(R.id.btn_footer);
         }
     }
 }
