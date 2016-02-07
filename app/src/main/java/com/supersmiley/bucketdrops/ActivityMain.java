@@ -10,6 +10,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.supersmiley.bucketdrops.Adapters.AdapterDrops;
+import com.supersmiley.bucketdrops.Adapters.AddListener;
 import com.supersmiley.bucketdrops.Adapters.Divider;
 import com.supersmiley.bucketdrops.beans.Drop;
 import com.supersmiley.bucketdrops.widgets.BucketRecyclerView;
@@ -31,6 +32,13 @@ public class ActivityMain extends AppCompatActivity{
     private View.OnClickListener mBtnAddListener = new View.OnClickListener(){
         @Override
         public void onClick(View v) {
+            showDialogAdd();
+        }
+    };
+
+    private AddListener mAddListener = new AddListener() {
+        @Override
+        public void add() {
             showDialogAdd();
         }
     };
@@ -62,7 +70,7 @@ public class ActivityMain extends AppCompatActivity{
         mRecycler.addItemDecoration(new Divider(this, LinearLayoutManager.VERTICAL));
         mRecycler.hideIfEmpty(mToolbar);
         mRecycler.showIfEmpty(mEmptyView);
-        mAdapter = new AdapterDrops(this, mResults);
+        mAdapter = new AdapterDrops(this, mResults, mAddListener);
         mRecycler.setAdapter(mAdapter);
         setSupportActionBar(mToolbar);
         initBackgroundImage();
