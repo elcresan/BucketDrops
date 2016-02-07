@@ -36,7 +36,7 @@ public class AdapterDrops extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         if(mResults == null || position < mResults.size()){
             return ITEM;
         } else{
-                return FOOTER;
+            return FOOTER;
         }
     }
 
@@ -50,7 +50,6 @@ public class AdapterDrops extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
            return new DropHolder(view);
         }
     }
-
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
@@ -68,9 +67,9 @@ public class AdapterDrops extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     public static class DropHolder extends RecyclerView.ViewHolder{
-
         TextView mTextWhat;
         TextView mTextWhen;
+
         public DropHolder(View itemView) {
             super(itemView);
 

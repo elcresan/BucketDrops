@@ -2,6 +2,7 @@ package com.supersmiley.bucketdrops;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.supersmiley.bucketdrops.Adapters.AdapterDrops;
+import com.supersmiley.bucketdrops.Adapters.Divider;
 import com.supersmiley.bucketdrops.beans.Drop;
 import com.supersmiley.bucketdrops.widgets.BucketRecyclerView;
 
@@ -57,6 +59,7 @@ public class ActivityMain extends AppCompatActivity{
         mBtnAdd = (Button) findViewById(R.id.btn_add);        
         mBtnAdd.setOnClickListener(mBtnAddListener);
         mRecycler = (BucketRecyclerView) findViewById(R.id.rv_drops);
+        mRecycler.addItemDecoration(new Divider(this, LinearLayoutManager.VERTICAL));
         mRecycler.hideIfEmpty(mToolbar);
         mRecycler.showIfEmpty(mEmptyView);
         mAdapter = new AdapterDrops(this, mResults);
