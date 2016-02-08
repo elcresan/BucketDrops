@@ -11,23 +11,27 @@ import android.widget.TextView;
 import com.supersmiley.bucketdrops.R;
 import com.supersmiley.bucketdrops.beans.Drop;
 
+import io.realm.Realm;
 import io.realm.RealmResults;
 
-public class AdapterDrops extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class AdapterDrops extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements SwipeListener{
     public static final int ITEM = 0;
     public static final int FOOTER = 1;
     private LayoutInflater mInflater;
     private RealmResults<Drop> mResults;
     private AddListener mAddListener;
+    private Realm mRealm;
 
-    public AdapterDrops(Context context, RealmResults<Drop> results){
+    public AdapterDrops(Context context, Realm realm, RealmResults<Drop> results){
         mInflater = LayoutInflater.from(context);
+        mRealm = realm;
         update(results);
     }
 
-    public AdapterDrops(Context context, RealmResults<Drop> results, AddListener listener){
+    public AdapterDrops(Context context, Realm realm, RealmResults<Drop> results, AddListener listener){
         mInflater = LayoutInflater.from(context);
         mAddListener = listener;
+        mRealm = realm;
         update(results);
     }
 
@@ -68,7 +72,20 @@ public class AdapterDrops extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public int getItemCount() {
-        return mResults.size() + 1;
+        // We need this check because of the footer.
+        return (mResults == null || mResults.isEmpty()) ? 0 : mResults.size() + 1;
+    }
+
+    @Override
+    public void onSwipe(int position) {
+        if(position < mResults.size()) {
+            mRealm.beginTransaction();
+            // Remove from database.
+            mResults.get(position).removeFromRealm();
+            mRealm.commitTransaction();
+            // Notify to the adapter.
+            notifyItemRemoved(position);
+        }
     }
 
     public static class DropHolder extends RecyclerView.ViewHolder{

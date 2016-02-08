@@ -53,7 +53,7 @@ public class BucketRecyclerView extends RecyclerView {
         if(getAdapter() != null && !mEmptyViews.isEmpty() && !mNonEmptyViews.isEmpty()){
 
             // There are no items. (1 is the footer).
-            if (getAdapter().getItemCount() == 1){
+            if (getAdapter().getItemCount() == 0){
                 // Show all the views for the empty state.
                 Util.showViews(mEmptyViews);
 

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -12,6 +13,7 @@ import com.bumptech.glide.Glide;
 import com.supersmiley.bucketdrops.Adapters.AdapterDrops;
 import com.supersmiley.bucketdrops.Adapters.AddListener;
 import com.supersmiley.bucketdrops.Adapters.Divider;
+import com.supersmiley.bucketdrops.Adapters.SimpleTouchCallback;
 import com.supersmiley.bucketdrops.beans.Drop;
 import com.supersmiley.bucketdrops.widgets.BucketRecyclerView;
 
@@ -70,9 +72,15 @@ public class ActivityMain extends AppCompatActivity{
         mRecycler.addItemDecoration(new Divider(this, LinearLayoutManager.VERTICAL));
         mRecycler.hideIfEmpty(mToolbar);
         mRecycler.showIfEmpty(mEmptyView);
-        mAdapter = new AdapterDrops(this, mResults, mAddListener);
+        mAdapter = new AdapterDrops(this, mRealm, mResults, mAddListener);
         mRecycler.setAdapter(mAdapter);
         setSupportActionBar(mToolbar);
+
+        // Handle swipe.
+        SimpleTouchCallback callback = new SimpleTouchCallback(mAdapter);
+        ItemTouchHelper helper = new ItemTouchHelper(callback);
+        helper.attachToRecyclerView(mRecycler);
+
         initBackgroundImage();
     }
 
