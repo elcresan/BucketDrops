@@ -24,4 +24,8 @@
     <dimen name="row_drop_padding">22dp</dimen>
     <dimen name="iv_drop_size">12dp</dimen>
     <dimen name="tv_what_horizontal_padding">22dp</dimen>
+    <dimen name="btn_mark_complete_text_size">24sp</dimen>
+    <dimen name="btn_mark_completed_vertical_padding">96dp</dimen>
+    <dimen name="btn_mark_completed_drawable_padding">16dp</dimen>
+    <dimen name="dialog_mark_completed_padding">24dp</dimen>
 </resources>
