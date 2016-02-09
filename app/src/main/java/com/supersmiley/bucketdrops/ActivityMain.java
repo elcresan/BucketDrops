@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide;
 import com.supersmiley.bucketdrops.Adapters.AdapterDrops;
 import com.supersmiley.bucketdrops.Adapters.AddListener;
 import com.supersmiley.bucketdrops.Adapters.Divider;
+import com.supersmiley.bucketdrops.Adapters.MarkListener;
 import com.supersmiley.bucketdrops.Adapters.SimpleTouchCallback;
 import com.supersmiley.bucketdrops.beans.Drop;
 import com.supersmiley.bucketdrops.widgets.BucketRecyclerView;
@@ -52,9 +53,24 @@ public class ActivityMain extends AppCompatActivity{
         }
     };
 
+    private MarkListener mMarkListener = new MarkListener() {
+        @Override
+        public void onMark(int position) {
+            showDialogMark(position);
+        }
+    };
+
     private void showDialogAdd() {
         DialogAdd dialog = new DialogAdd();
         dialog.show(getSupportFragmentManager(), "Add");
+    }
+
+    private void showDialogMark(int position) {
+        DialogMark dialog = new DialogMark();
+        Bundle bundle = new Bundle();
+        bundle.putInt("POSITION", position);
+        dialog.setArguments(bundle);
+        dialog.show(getSupportFragmentManager(), "Mark");
     }
 
     @Override
@@ -72,7 +88,7 @@ public class ActivityMain extends AppCompatActivity{
         mRecycler.addItemDecoration(new Divider(this, LinearLayoutManager.VERTICAL));
         mRecycler.hideIfEmpty(mToolbar);
         mRecycler.showIfEmpty(mEmptyView);
-        mAdapter = new AdapterDrops(this, mRealm, mResults, mAddListener);
+        mAdapter = new AdapterDrops(this, mRealm, mResults, mAddListener, mMarkListener);
         mRecycler.setAdapter(mAdapter);
         setSupportActionBar(mToolbar);
 
