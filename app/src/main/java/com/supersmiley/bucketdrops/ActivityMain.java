@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.supersmiley.bucketdrops.Adapters.AdapterDrops;
 import com.supersmiley.bucketdrops.Adapters.AddListener;
+import com.supersmiley.bucketdrops.Adapters.CompleteListener;
 import com.supersmiley.bucketdrops.Adapters.Divider;
 import com.supersmiley.bucketdrops.Adapters.MarkListener;
 import com.supersmiley.bucketdrops.Adapters.SimpleTouchCallback;
@@ -60,6 +61,13 @@ public class ActivityMain extends AppCompatActivity{
         }
     };
 
+    private CompleteListener mCompleteListener = new CompleteListener() {
+        @Override
+        public void onComplete(int position) {
+            mAdapter.markComplete(position);
+        }
+    };
+
     private void showDialogAdd() {
         DialogAdd dialog = new DialogAdd();
         dialog.show(getSupportFragmentManager(), "Add");
@@ -70,6 +78,7 @@ public class ActivityMain extends AppCompatActivity{
         Bundle bundle = new Bundle();
         bundle.putInt("POSITION", position);
         dialog.setArguments(bundle);
+        dialog.setCompleteListener(mCompleteListener);
         dialog.show(getSupportFragmentManager(), "Mark");
     }
 

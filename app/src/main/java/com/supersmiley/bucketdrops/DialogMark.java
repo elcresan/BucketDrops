@@ -9,17 +9,21 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 
+import com.supersmiley.bucketdrops.Adapters.CompleteListener;
+
 public class DialogMark extends DialogFragment {
 
     private ImageButton mBtnclose;
     private Button mBtnCompleted;
-    private int mPosition;
+    private CompleteListener mListener;
+
     private View.OnClickListener mBtnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             switch (v.getId()){
                 case R.id.btn_completed:
                     // TODO: handle the action to mark the item as completed.
+                    markAsComplete();
                     break;
             }
 
@@ -27,6 +31,14 @@ public class DialogMark extends DialogFragment {
             dismiss();
         }
     };
+
+    private void markAsComplete() {
+        Bundle arguments = getArguments();
+
+        if(mListener != null && arguments != null){
+            mListener.onComplete(arguments.getInt("POSITION"));
+        }
+    }
 
     @Nullable
     @Override
@@ -42,12 +54,9 @@ public class DialogMark extends DialogFragment {
         mBtnCompleted = (Button) view.findViewById(R.id.btn_completed);
         mBtnclose.setOnClickListener(mBtnClickListener);
         mBtnCompleted.setOnClickListener(mBtnClickListener);
+    }
 
-        Bundle arguments = getArguments();
-
-        if(arguments != null){
-            // TOOO: Use it to mark the item.
-            int position = arguments.getInt("POSITION");
-        }
+    public void setCompleteListener(CompleteListener completeListener) {
+        mListener = completeListener;
     }
 }

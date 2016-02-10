@@ -1,6 +1,8 @@
 package com.supersmiley.bucketdrops.Adapters;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +12,7 @@ import android.widget.TextView;
 
 import com.supersmiley.bucketdrops.R;
 import com.supersmiley.bucketdrops.beans.Drop;
+import com.supersmiley.bucketdrops.extras.Util;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -66,9 +69,11 @@ public class AdapterDrops extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if(holder instanceof DropHolder){
+            DropHolder dropHolder = (DropHolder) holder;
             Drop drop = mResults.get(position);
-            ((DropHolder)holder).mTextWhat.setText(drop.getWhat());
-            ((DropHolder)holder).mTextWhen.setText("Today!");
+            dropHolder.setWhat(drop.getWhat());
+            dropHolder.mTextWhen.setText("Today!");
+            dropHolder.setBackground(drop.isComplete());
         }
     }
 
@@ -90,23 +95,55 @@ public class AdapterDrops extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
     }
 
+    public void markComplete(int position) {
+        if(position < mResults.size()) {
+            mRealm.beginTransaction();
+            // The object is updated in realm.
+            mResults.get(position).setComplete(true);
+            mRealm.commitTransaction();
+
+            // Notify changes to the adapter.
+            notifyItemChanged(position);
+        }
+    }
+
     public static class DropHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView mTextWhat;
         TextView mTextWhen;
         MarkListener mMarkListener;
+        Context mContext;
+        View mItemView;
 
         public DropHolder(View itemView, MarkListener markListener) {
             super(itemView);
 
+            mItemView = itemView;
+            mContext = itemView.getContext();
             itemView.setOnClickListener(this);
             mTextWhat = (TextView) itemView.findViewById(R.id.tv_what);
             mTextWhen = (TextView) itemView.findViewById(R.id.tv_when);
             mMarkListener = markListener;
         }
 
+        public void setWhat(String what){
+            mTextWhat.setText(what);
+        }
+
         @Override
         public void onClick(View v) {
             mMarkListener.onMark(getAdapterPosition());
+        }
+
+        public void setBackground(boolean complete) {
+            Drawable drawable;
+
+            if(complete) {
+                drawable = ContextCompat.getDrawable(mContext, R.color.bg_drop_complete);
+            } else {
+                drawable = ContextCompat.getDrawable(mContext, R.drawable.bg_row_drop);
+            }
+
+            Util.setBackground(mItemView, drawable);
         }
     }
 
