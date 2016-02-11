@@ -13,6 +13,8 @@ import android.widget.ImageButton;
 
 import com.supersmiley.bucketdrops.beans.Drop;
 
+import java.util.Calendar;
+
 import io.realm.Realm;
 
 public class DialogAdd extends DialogFragment {
@@ -39,13 +41,20 @@ public class DialogAdd extends DialogFragment {
 
     // TODO: Process date
     private void addAction() {
-        // TODO: Get time from the date picker.
         long now = System.currentTimeMillis();
         String what = mInputWhat.getText().toString();
+        String when = mInputWhen.getDayOfMonth() + "/" + mInputWhen.getMonth() + "/" + mInputWhen.getYear();
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_MONTH, mInputWhen.getDayOfMonth());
+        calendar.set(Calendar.MONTH, mInputWhen.getMonth());
+        calendar.set(Calendar.YEAR, mInputWhen.getYear());
+        calendar.set(Calendar.HOUR, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
 
         // Get realm and create the new object
         Realm realm = Realm.getDefaultInstance();
-        Drop drop = new Drop(what, now, 0, false);
+        Drop drop = new Drop(what, now, calendar.getTimeInMillis(), false);
 
         // Add the new drop to the realm (database) in a transaction
         realm.beginTransaction();
