@@ -3,7 +3,9 @@ package com.supersmiley.bucketdrops.extras;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.view.View;
+import android.widget.DatePicker;
 
+import java.util.Calendar;
 import java.util.List;
 
 public class Util {
@@ -34,5 +36,17 @@ public class Util {
         } else {
             mItemView.setBackgroundDrawable(drawable);
         }
+    }
+
+    public static Calendar getCalendarFromDatePicker(DatePicker date){
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_MONTH, date.getDayOfMonth());
+        calendar.set(Calendar.MONTH, date.getMonth());
+        calendar.set(Calendar.YEAR, date.getYear());
+        calendar.set(Calendar.HOUR, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+
+        return calendar;
     }
 }

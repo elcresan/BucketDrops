@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 
 import com.supersmiley.bucketdrops.beans.Drop;
+import com.supersmiley.bucketdrops.extras.Util;
 
 import java.util.Calendar;
 
@@ -43,14 +44,7 @@ public class DialogAdd extends DialogFragment {
     private void addAction() {
         long now = System.currentTimeMillis();
         String what = mInputWhat.getText().toString();
-        String when = mInputWhen.getDayOfMonth() + "/" + mInputWhen.getMonth() + "/" + mInputWhen.getYear();
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.DAY_OF_MONTH, mInputWhen.getDayOfMonth());
-        calendar.set(Calendar.MONTH, mInputWhen.getMonth());
-        calendar.set(Calendar.YEAR, mInputWhen.getYear());
-        calendar.set(Calendar.HOUR, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
+        Calendar calendar = Util.getCalendarFromDatePicker(mInputWhen);
 
         // Get realm and create the new object
         Realm realm = Realm.getDefaultInstance();
