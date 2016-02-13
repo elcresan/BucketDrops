@@ -24,6 +24,7 @@ import com.supersmiley.bucketdrops.widgets.BucketRecyclerView;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 public class ActivityMain extends AppCompatActivity{
 
@@ -136,15 +137,25 @@ public class ActivityMain extends AppCompatActivity{
 
         switch (id){
             case R.id.action_add:
-                break;
+                showDialogAdd();
+
+                return true;
             case R.id.action_sort_descending_date:
-                break;
+                mResults = mRealm.where(Drop.class).findAllSortedAsync("when");
+                mResults.addChangeListener(mChangeListener);
+                return true;
             case R.id.action_sort_ascending_date:
-                break;
+                mResults = mRealm.where(Drop.class).findAllSortedAsync("when", Sort.DESCENDING);
+                mResults.addChangeListener(mChangeListener);
+                return true;
             case R.id.action_show_complete:
-                break;
+                mResults = mRealm.where(Drop.class).equalTo("completed", true).findAllAsync();
+                mResults.addChangeListener(mChangeListener);
+                return true;
             case R.id.action_show_incomplete:
-                break;
+                mResults = mRealm.where(Drop.class).equalTo("completed", false).findAllAsync();
+                mResults.addChangeListener(mChangeListener);
+                return true;
         }
 
         return super.onOptionsItemSelected(item);

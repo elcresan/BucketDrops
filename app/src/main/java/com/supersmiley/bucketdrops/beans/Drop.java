@@ -9,13 +9,13 @@ public class Drop extends RealmObject {
     @PrimaryKey
     private long added;
     private long when;
-    private boolean complete;
+    private boolean completed;
 
     public Drop() {
     }
 
-    public Drop(String what, long added, long when, boolean complete) {
-        this.complete = complete;
+    public Drop(String what, long added, long when, boolean completed) {
+        this.completed = completed;
         this.what = what;
         this.added = added;
         this.when = when;
@@ -45,11 +45,11 @@ public class Drop extends RealmObject {
         this.when = when;
     }
 
-    public boolean isComplete() {
-        return complete;
+    public boolean isCompleted() {
+        return completed;
     }
 
-    public void setComplete(boolean complete) {
-        this.complete = complete;
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
     }
 }

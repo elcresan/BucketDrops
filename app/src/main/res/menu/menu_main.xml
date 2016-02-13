@@ -15,8 +15,8 @@
         android:title="@string/action_least_time_left"/>
     <item
         android:id="@+id/action_show_complete"
-        android:title="@string/action_complete"/>
+        android:title="@string/action_completed"/>
     <item
         android:id="@+id/action_show_incomplete"
-        android:title="@string/action_incomplete"/>
+        android:title="@string/action_uncompleted"/>
 </menu>

@@ -74,7 +74,7 @@ public class AdapterDrops extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             Drop drop = mResults.get(position);
             dropHolder.setWhat(drop.getWhat());
             dropHolder.setWhen(drop.getWhen());
-            dropHolder.setBackground(drop.isComplete());
+            dropHolder.setBackground(drop.isCompleted());
         }
     }
 
@@ -100,7 +100,7 @@ public class AdapterDrops extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         if(position < mResults.size()) {
             mRealm.beginTransaction();
             // The object is updated in realm.
-            mResults.get(position).setComplete(true);
+            mResults.get(position).setCompleted(true);
             mRealm.commitTransaction();
 
             // Notify changes to the adapter.
