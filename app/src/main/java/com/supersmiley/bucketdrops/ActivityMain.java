@@ -1,5 +1,6 @@
 package com.supersmiley.bucketdrops;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,6 +17,7 @@ import com.supersmiley.bucketdrops.Adapters.AdapterDrops;
 import com.supersmiley.bucketdrops.Adapters.AddListener;
 import com.supersmiley.bucketdrops.Adapters.CompleteListener;
 import com.supersmiley.bucketdrops.Adapters.Divider;
+import com.supersmiley.bucketdrops.Adapters.Filter;
 import com.supersmiley.bucketdrops.Adapters.MarkListener;
 import com.supersmiley.bucketdrops.Adapters.SimpleTouchCallback;
 import com.supersmiley.bucketdrops.beans.Drop;
@@ -91,7 +93,7 @@ public class ActivityMain extends AppCompatActivity{
 
         setContentView(R.layout.activity_main);
         mRealm = Realm.getDefaultInstance();
-        mResults = mRealm.where(Drop.class).findAllAsync();
+        loadResults(load());
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mEmptyView = findViewById(R.id.empty_drops);
         mBtnAdd = (Button) findViewById(R.id.btn_add);        
@@ -134,31 +136,79 @@ public class ActivityMain extends AppCompatActivity{
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        boolean handled = true;
+        int filterOption = Filter.NONE;
 
         switch (id){
             case R.id.action_add:
                 showDialogAdd();
 
-                return true;
+                break;
             case R.id.action_sort_descending_date:
-                mResults = mRealm.where(Drop.class).findAllSortedAsync("when");
-                mResults.addChangeListener(mChangeListener);
-                return true;
+                filterOption = Filter.LEAST_TIME_LEFT;
+
+                break;
             case R.id.action_sort_ascending_date:
-                mResults = mRealm.where(Drop.class).findAllSortedAsync("when", Sort.DESCENDING);
-                mResults.addChangeListener(mChangeListener);
-                return true;
+                filterOption = Filter.MOST_TIME_LEFT;
+
+                break;
             case R.id.action_show_complete:
-                mResults = mRealm.where(Drop.class).equalTo("completed", true).findAllAsync();
-                mResults.addChangeListener(mChangeListener);
-                return true;
+                filterOption = Filter.COMPLETED;
+
+                break;
             case R.id.action_show_incomplete:
-                mResults = mRealm.where(Drop.class).equalTo("completed", false).findAllAsync();
-                mResults.addChangeListener(mChangeListener);
-                return true;
+                filterOption = Filter.UNCOMPLETED;
+
+                break;
+            default:
+                handled = false;
+
+                break;
         }
 
-        return super.onOptionsItemSelected(item);
+        save(filterOption);
+        loadResults(filterOption);
+        return handled;
+    }
+
+    private void loadResults(int filterOption){
+        switch (filterOption) {
+            case Filter.NONE:
+                mResults = mRealm.where(Drop.class).findAllAsync();
+
+                break;
+            case Filter.LEAST_TIME_LEFT:
+                mResults = mRealm.where(Drop.class).findAllSortedAsync("when");
+
+                break;
+            case Filter.MOST_TIME_LEFT:
+                mResults = mRealm.where(Drop.class).findAllSortedAsync("when", Sort.DESCENDING);
+
+                break;
+            case Filter.COMPLETED:
+                mResults = mRealm.where(Drop.class).equalTo("completed", true).findAllAsync();
+
+                break;
+            case Filter.UNCOMPLETED:
+                mResults = mRealm.where(Drop.class).equalTo("completed", false).findAllAsync();
+
+                break;
+        }
+
+        mResults.addChangeListener(mChangeListener);
+    }
+
+    private void save(int filterOption) {
+        SharedPreferences pref = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor =  pref.edit();
+
+        editor.putInt("filter", filterOption);
+        editor.apply();
+    }
+
+    private int load() {
+        SharedPreferences pref = getPreferences(MODE_PRIVATE);
+        return pref.getInt("filter", 0);
     }
 
     private void initBackgroundImage(){
