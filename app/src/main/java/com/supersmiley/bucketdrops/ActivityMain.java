@@ -2,6 +2,7 @@ package com.supersmiley.bucketdrops;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -101,7 +102,9 @@ public class ActivityMain extends AppCompatActivity{
         mRecycler.addItemDecoration(new Divider(this, LinearLayoutManager.VERTICAL));
         mRecycler.hideIfEmpty(mToolbar);
         mRecycler.showIfEmpty(mEmptyView);
+        mRecycler.setItemAnimator(new DefaultItemAnimator());
         mAdapter = new AdapterDrops(this, mRealm, mResults, mAddListener, mMarkListener);
+        mAdapter.setHasStableIds(true);
         mRecycler.setAdapter(mAdapter);
         setSupportActionBar(mToolbar);
 

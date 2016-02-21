@@ -84,6 +84,16 @@ public class AdapterDrops extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     @Override
+    public long getItemId(int position) {
+        if(position < mResults.size()) {
+
+           return mResults.get(position).getAdded();
+        }
+
+        return RecyclerView.NO_ID;
+    }
+
+    @Override
     public int getItemCount() {
         if(!mResults.isEmpty()){
             return mResults.size() + COUNT_FOOTER;
