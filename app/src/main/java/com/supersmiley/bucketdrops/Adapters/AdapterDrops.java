@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.supersmiley.bucketdrops.AppBucketDrops;
 import com.supersmiley.bucketdrops.R;
 import com.supersmiley.bucketdrops.beans.Drop;
 import com.supersmiley.bucketdrops.extras.Util;
@@ -19,17 +20,23 @@ import io.realm.Realm;
 import io.realm.RealmResults;
 
 public class AdapterDrops extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements SwipeListener{
+    public static final int COUNT_FOOTER = 1;
+    public static final int COUNT_NO_ITEMS = 1;
     public static final int ITEM = 0;
-    public static final int FOOTER = 1;
+    public static final int NO_ITEM = 1;
+    public static final int FOOTER = 2;
     private LayoutInflater mInflater;
     private RealmResults<Drop> mResults;
     private AddListener mAddListener;
     private MarkListener mMarkListener;
     private Realm mRealm;
+    private int mFilterOption;
+    private Context mContext;
 
     public AdapterDrops(Context context, Realm realm, RealmResults<Drop> results){
         mInflater = LayoutInflater.from(context);
         mRealm = realm;
+        mContext = context;
         update(results);
     }
 
@@ -38,32 +45,30 @@ public class AdapterDrops extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         mAddListener = addListener;
         mMarkListener = markListener;
         mRealm = realm;
+        mContext = context;
         update(results);
     }
 
     public void update(RealmResults<Drop> results){
         mResults = results;
+        mFilterOption = AppBucketDrops.load(mContext);
         notifyDataSetChanged();
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        // We return an item if results are null or if the position is withing the bounds of the results
-        if(mResults == null || position < mResults.size()){
-            return ITEM;
-        } else{
-            return FOOTER;
-        }
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if(viewType == FOOTER){
             View view = mInflater.inflate(R.layout.footer, parent, false);
+
             return new FooterHolder(view, mAddListener);
-        } else{
+        } else if(viewType == NO_ITEM){
+            View view = mInflater.inflate(R.layout.no_item, parent, false);
+
+            return new DropHolder.NoItemsHolder(view);
+        } else {
             View view = mInflater.inflate(R.layout.row_drop, parent, false);
-           return new DropHolder(view, mMarkListener);
+
+            return new DropHolder(view, mMarkListener);
         }
     }
 
@@ -80,8 +85,37 @@ public class AdapterDrops extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public int getItemCount() {
-        // We need this check because of the footer.
-        return (mResults == null || mResults.isEmpty()) ? 0 : mResults.size() + 1;
+        if(!mResults.isEmpty()){
+            return mResults.size() + COUNT_FOOTER;
+        } else if (mFilterOption == Filter.LEAST_TIME_LEFT
+                || mFilterOption == Filter.MOST_TIME_LEFT
+                || mFilterOption == Filter.NONE){
+                return 0;
+            } else {
+                return COUNT_NO_ITEMS + COUNT_FOOTER;
+            }
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if(!mResults.isEmpty()){
+            if(position < mResults.size()){
+                return ITEM;
+            } else {
+                return FOOTER;
+            }
+        } else {
+            if (mFilterOption == Filter.COMPLETED
+                    || mFilterOption == Filter.UNCOMPLETED){
+                if(position == 0){
+                    return NO_ITEM;
+                } else {
+                    return  FOOTER;
+                }
+            } else {
+                return ITEM;
+            }
+        }
     }
 
     @Override
@@ -132,6 +166,13 @@ public class AdapterDrops extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         public void setWhen(long when) {
             mTextWhen.setText(DateUtils.getRelativeTimeSpanString(when, System.currentTimeMillis(), DateUtils.DAY_IN_MILLIS, DateUtils.FORMAT_ABBREV_ALL));
+        }
+
+        public static class NoItemsHolder extends RecyclerView.ViewHolder {
+
+            public NoItemsHolder(View itemView) {
+                super(itemView);
+            }
         }
 
         @Override

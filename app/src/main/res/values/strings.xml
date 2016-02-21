@@ -9,4 +9,6 @@
     <string name="action_least_time_left">Least Time Left</string>
     <string name="action_completed">Completed</string>
     <string name="action_uncompleted">Uncompleted</string>
+    <string name="str_no_items">No Items To Display</string>
+    <string name="action_none">None</string>
 </resources>

@@ -1,6 +1,5 @@
 package com.supersmiley.bucketdrops;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -93,7 +92,7 @@ public class ActivityMain extends AppCompatActivity{
 
         setContentView(R.layout.activity_main);
         mRealm = Realm.getDefaultInstance();
-        loadResults(load());
+        loadResults(AppBucketDrops.load(this));
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mEmptyView = findViewById(R.id.empty_drops);
         mBtnAdd = (Button) findViewById(R.id.btn_add);        
@@ -144,6 +143,10 @@ public class ActivityMain extends AppCompatActivity{
                 showDialogAdd();
 
                 break;
+            case R.id.action_sort_none:
+                filterOption = Filter.NONE;
+
+                break;
             case R.id.action_sort_descending_date:
                 filterOption = Filter.LEAST_TIME_LEFT;
 
@@ -166,7 +169,7 @@ public class ActivityMain extends AppCompatActivity{
                 break;
         }
 
-        save(filterOption);
+        AppBucketDrops.save(this, filterOption);
         loadResults(filterOption);
         return handled;
     }
@@ -196,19 +199,6 @@ public class ActivityMain extends AppCompatActivity{
         }
 
         mResults.addChangeListener(mChangeListener);
-    }
-
-    private void save(int filterOption) {
-        SharedPreferences pref = getPreferences(MODE_PRIVATE);
-        SharedPreferences.Editor editor =  pref.edit();
-
-        editor.putInt("filter", filterOption);
-        editor.apply();
-    }
-
-    private int load() {
-        SharedPreferences pref = getPreferences(MODE_PRIVATE);
-        return pref.getInt("filter", 0);
     }
 
     private void initBackgroundImage(){
