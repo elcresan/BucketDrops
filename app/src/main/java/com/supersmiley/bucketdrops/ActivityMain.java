@@ -19,6 +19,7 @@ import com.supersmiley.bucketdrops.Adapters.CompleteListener;
 import com.supersmiley.bucketdrops.Adapters.Divider;
 import com.supersmiley.bucketdrops.Adapters.Filter;
 import com.supersmiley.bucketdrops.Adapters.MarkListener;
+import com.supersmiley.bucketdrops.Adapters.ResetListener;
 import com.supersmiley.bucketdrops.Adapters.SimpleTouchCallback;
 import com.supersmiley.bucketdrops.beans.Drop;
 import com.supersmiley.bucketdrops.widgets.BucketRecyclerView;
@@ -73,6 +74,14 @@ public class ActivityMain extends AppCompatActivity{
         }
     };
 
+    private ResetListener mResetListener = new ResetListener() {
+        @Override
+        public void onReset() {
+            AppBucketDrops.save(ActivityMain.this, Filter.NONE);
+            loadResults(Filter.NONE);
+        }
+    };
+
     private void showDialogAdd() {
         DialogAdd dialog = new DialogAdd();
         dialog.show(getSupportFragmentManager(), "Add");
@@ -103,7 +112,7 @@ public class ActivityMain extends AppCompatActivity{
         mRecycler.hideIfEmpty(mToolbar);
         mRecycler.showIfEmpty(mEmptyView);
         mRecycler.setItemAnimator(new DefaultItemAnimator());
-        mAdapter = new AdapterDrops(this, mRealm, mResults, mAddListener, mMarkListener);
+        mAdapter = new AdapterDrops(this, mRealm, mResults, mAddListener, mMarkListener, mResetListener);
         mAdapter.setHasStableIds(true);
         mRecycler.setAdapter(mAdapter);
         setSupportActionBar(mToolbar);

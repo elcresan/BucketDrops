@@ -25,6 +25,7 @@ public class AdapterDrops extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public static final int ITEM = 0;
     public static final int NO_ITEM = 1;
     public static final int FOOTER = 2;
+    private final ResetListener mResetListener;
     private LayoutInflater mInflater;
     private RealmResults<Drop> mResults;
     private AddListener mAddListener;
@@ -33,19 +34,13 @@ public class AdapterDrops extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private int mFilterOption;
     private Context mContext;
 
-    public AdapterDrops(Context context, Realm realm, RealmResults<Drop> results){
-        mInflater = LayoutInflater.from(context);
-        mRealm = realm;
-        mContext = context;
-        update(results);
-    }
-
-    public AdapterDrops(Context context, Realm realm, RealmResults<Drop> results, AddListener addListener, MarkListener markListener){
+    public AdapterDrops(Context context, Realm realm, RealmResults<Drop> results, AddListener addListener, MarkListener markListener, ResetListener resetListener){
         mInflater = LayoutInflater.from(context);
         mAddListener = addListener;
         mMarkListener = markListener;
         mRealm = realm;
         mContext = context;
+        mResetListener = resetListener;
         update(results);
     }
 
@@ -137,6 +132,14 @@ public class AdapterDrops extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             mRealm.commitTransaction();
             // Notify to the adapter.
             notifyItemRemoved(position);
+        }
+
+        resetFilterIfEmpty();
+    }
+
+    private void resetFilterIfEmpty() {
+        if(mResults.isEmpty() && (mFilterOption == Filter.COMPLETED || mFilterOption == Filter.UNCOMPLETED)){
+            mResetListener.onReset();
         }
     }
 
