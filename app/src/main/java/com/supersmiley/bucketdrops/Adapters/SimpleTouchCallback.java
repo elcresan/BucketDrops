@@ -1,5 +1,6 @@
 package com.supersmiley.bucketdrops.Adapters;
 
+import android.graphics.Canvas;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 
@@ -32,10 +33,29 @@ public class SimpleTouchCallback extends ItemTouchHelper.Callback {
         return false;
     }
 
+    @Override
+    public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+        // Avoid swipe for the special items (add button and no items row.)
+        if(viewHolder instanceof AdapterDrops.DropHolder) {
+            super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+        }
+    }
+
+    @Override
+    public void onChildDrawOver(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+        // Avoid swipe for the special items (add button and no items row.)
+        if(viewHolder instanceof AdapterDrops.DropHolder) {
+            super.onChildDrawOver(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+        }
+    }
+
     // Called after the item is swiped.
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-        // We need to create an interface to communicate with the adapter of the recycler view.
-        mListener.onSwipe(viewHolder.getAdapterPosition());
+        if(viewHolder instanceof AdapterDrops.DropHolder) {
+
+            // We need to create an interface to communicate with the adapter of the recycler view.
+            mListener.onSwipe(viewHolder.getAdapterPosition());
+        }
     }
 }
