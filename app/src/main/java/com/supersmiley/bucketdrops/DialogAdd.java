@@ -57,6 +57,12 @@ public class DialogAdd extends DialogFragment {
         realm.close();
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogTheme);
+    }
+
     public DialogAdd() {
     }
 
