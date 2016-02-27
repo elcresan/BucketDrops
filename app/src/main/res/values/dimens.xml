@@ -36,4 +36,7 @@
 
     <!--Padding for the TextView inside no_item.xml-->
     <dimen name="tv_no_items_vertical_padding">22dp</dimen>
+    <dimen name="bucket_picker_text_size">24sp</dimen>
+    <dimen name="bucket_picker_tv_width">96dp</dimen>
+    <dimen name="bucket_picker_drawable_padding">16dp</dimen>
 </resources>
