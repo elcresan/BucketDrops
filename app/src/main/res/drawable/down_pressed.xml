@@ -6,5 +6,7 @@
             <size android:width="@dimen/bucket_picker_tv_width" />
         </shape>
     </item>
-    <item android:drawable="@drawable/ic_down_pressed" android:gravity="center" />
+    <item>
+        <bitmap android:src="@drawable/ic_down_pressed" android:gravity="center"/>
+    </item>
 </layer-list>

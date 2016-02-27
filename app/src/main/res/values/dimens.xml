@@ -39,4 +39,5 @@
     <dimen name="bucket_picker_text_size">24sp</dimen>
     <dimen name="bucket_picker_tv_width">96dp</dimen>
     <dimen name="bucket_picker_drawable_padding">16dp</dimen>
+    <dimen name="bg_picker_item_corner_radius">4dp</dimen>
 </resources>

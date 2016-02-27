@@ -7,21 +7,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
 import com.supersmiley.bucketdrops.beans.Drop;
-import com.supersmiley.bucketdrops.extras.Util;
-
-import java.util.Calendar;
+import com.supersmiley.bucketdrops.widgets.BucketPickerView;
 
 import io.realm.Realm;
 
 public class DialogAdd extends DialogFragment {
     private ImageButton mBtnClose;
     private EditText mInputWhat;
-    private DatePicker mInputWhen;
+    private BucketPickerView mInputWhen;
     private Button mBtnAdd;
 
     private View.OnClickListener mBtnClickListener = new View.OnClickListener() {
@@ -44,11 +41,10 @@ public class DialogAdd extends DialogFragment {
     private void addAction() {
         long now = System.currentTimeMillis();
         String what = mInputWhat.getText().toString();
-        Calendar calendar = Util.getCalendarFromDatePicker(mInputWhen);
 
         // Get realm and create the new object
         Realm realm = Realm.getDefaultInstance();
-        Drop drop = new Drop(what, now, calendar.getTimeInMillis(), false);
+        Drop drop = new Drop(what, now, mInputWhen.getTime(), false);
 
         // Add the new drop to the realm (database) in a transaction
         realm.beginTransaction();
@@ -79,7 +75,7 @@ public class DialogAdd extends DialogFragment {
         // Initialize views.
         mBtnClose = (ImageButton) view.findViewById(R.id.btn_close);
         mInputWhat = (EditText) view.findViewById(R.id.et_drop);
-        mInputWhen = (DatePicker) view.findViewById(R.id.bpv_date);
+        mInputWhen = (BucketPickerView) view.findViewById(R.id.bpv_date);
         mBtnAdd = (Button) view.findViewById(R.id.btn_add);
 
         mBtnClose.setOnClickListener(mBtnClickListener);
