@@ -3,8 +3,10 @@ package com.supersmiley.bucketdrops.widgets;
 import android.content.Context;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -12,6 +14,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.supersmiley.bucketdrops.AppBucketDrops;
 import com.supersmiley.bucketdrops.R;
 
 import java.text.SimpleDateFormat;
@@ -75,12 +78,35 @@ public class BucketPickerView extends LinearLayout implements View.OnTouchListen
     }
 
     @Override
+    protected Parcelable onSaveInstanceState() {
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("super", super.onSaveInstanceState());
+        bundle.putLong("time", mCalendar.getTimeInMillis());
+
+        return bundle;
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Parcelable state) {
+        if(state instanceof Parcelable){
+            Bundle bundle = (Bundle) state;
+            state = bundle.getParcelable("super");
+            mCalendar.setTimeInMillis(bundle.getLong("time"));
+            updateViews();
+        }
+
+        super.onRestoreInstanceState(state);
+    }
+
+    @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
 
         mTextDate = (TextView) this.findViewById(R.id.tv_date);
         mTextMonth = (TextView) this.findViewById(R.id.tv_month);
         mTextYear = (TextView) this.findViewById(R.id.tv_year);
+
+        AppBucketDrops.setRalewayRegular(getContext(), mTextDate, mTextMonth, mTextYear);
 
         mTextDate.setOnTouchListener(this);
         mTextMonth.setOnTouchListener(this);
@@ -101,9 +127,13 @@ public class BucketPickerView extends LinearLayout implements View.OnTouchListen
         mCalendar.set(Calendar.MINUTE, minute);
         mCalendar.set(Calendar.SECOND, second);
 
+        updateViews();
+    }
+
+    private void updateViews(){
         mTextMonth.setText(mFormatter.format(mCalendar.getTime()));
-        mTextDate.setText(date + "");
-        mTextYear.setText(year + "");
+        mTextDate.setText(mCalendar.get(Calendar.DATE) + "");
+        mTextYear.setText(mCalendar.get(Calendar.YEAR) + "");
     }
 
     public long getTime(){

@@ -11,7 +11,7 @@
         android:text="JAN"/>
 
     <android.support.v4.widget.Space
-        android:layout_width="32dp"
+        android:layout_width="@dimen/bucket_picker_space"
         android:layout_height="match_parent" />
 
     <TextView
@@ -20,7 +20,7 @@
         android:text="10" />
 
     <android.support.v4.widget.Space
-        android:layout_width="32dp"
+        android:layout_width="@dimen/bucket_picker_space"
         android:layout_height="match_parent" />
 
     <TextView

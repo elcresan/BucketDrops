@@ -78,6 +78,8 @@ public class DialogAdd extends DialogFragment {
         mInputWhen = (BucketPickerView) view.findViewById(R.id.bpv_date);
         mBtnAdd = (Button) view.findViewById(R.id.btn_add);
 
+        AppBucketDrops.setRalewayRegular(getActivity(), mInputWhat, mBtnAdd);
+
         mBtnClose.setOnClickListener(mBtnClickListener);
         mBtnAdd.setOnClickListener(mBtnClickListener);
     }

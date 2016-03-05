@@ -35,10 +35,12 @@
     <dimen name="row_drop_padding">22dp</dimen>
 
     <!--Padding for the TextView inside no_item.xml-->
+    <dimen name="bucket_picker_tv_width">92dp</dimen>
     <dimen name="tv_no_items_vertical_padding">22dp</dimen>
     <dimen name="bucket_picker_text_size">24sp</dimen>
-    <dimen name="bucket_picker_tv_width">96dp</dimen>
     <dimen name="bucket_picker_drawable_padding">16dp</dimen>
     <dimen name="bg_picker_item_corner_radius">4dp</dimen>
-    <dimen name="bucket_picker_vetical_margin">64dp</dimen>
+    <dimen name="bucket_picker_vertical_margin">64dp</dimen>
+    <dimen name="bucket_picker_space">16dp</dimen>
+    <dimen name="picker_add_btn_text_size">28sp</dimen>
 </resources>
