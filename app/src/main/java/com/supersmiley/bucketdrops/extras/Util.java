@@ -1,9 +1,15 @@
 package com.supersmiley.bucketdrops.extras;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.view.View;
 import android.widget.DatePicker;
+
+import com.supersmiley.bucketdrops.services.NotificationService;
 
 import java.util.Calendar;
 import java.util.List;
@@ -48,5 +54,12 @@ public class Util {
         calendar.set(Calendar.SECOND, 0);
 
         return calendar;
+    }
+
+    public static void scheduleAlarm(Context context){
+        AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context, NotificationService.class);
+        PendingIntent pendingIntent = PendingIntent.getService(context, 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        manager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, 1000, 3600000, pendingIntent);
     }
 }

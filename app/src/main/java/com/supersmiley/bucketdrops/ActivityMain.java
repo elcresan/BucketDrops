@@ -22,6 +22,7 @@ import com.supersmiley.bucketdrops.Adapters.MarkListener;
 import com.supersmiley.bucketdrops.Adapters.ResetListener;
 import com.supersmiley.bucketdrops.Adapters.SimpleTouchCallback;
 import com.supersmiley.bucketdrops.beans.Drop;
+import com.supersmiley.bucketdrops.extras.Util;
 import com.supersmiley.bucketdrops.widgets.BucketRecyclerView;
 
 import io.realm.Realm;
@@ -123,6 +124,9 @@ public class ActivityMain extends AppCompatActivity{
         helper.attachToRecyclerView(mRecycler);
 
         initBackgroundImage();
+
+        // Show notifications when the goal is near.
+        Util.scheduleAlarm(this);
     }
 
     @Override
